@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>造雪机雪粒覆盖渲染工具</title>
+  </head>
+  <body>
+    <div id="stage"></div>
+
+    <header class="topbar">
+      <span class="logo">❄</span>
+      <div>
+        <h1>造雪机雪粒覆盖渲染工具</h1>
+        <p>实例化粒子 · 风向联动飘移堆积 · 夜间辉光</p>
+      </div>
+    </header>
+
+    <aside id="dock">
+      <machine-panel></machine-panel>
+      <parameter-panel></parameter-panel>
+      <simulation-panel></simulation-panel>
+      <plan-panel></plan-panel>
+    </aside>
+
+    <div id="hint">左键旋转 · 右键平移 · 滚轮缩放 · 拖动造雪机可在坡面移动</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
