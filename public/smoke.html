@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>smoke</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      #c {
+        width: 960px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="c"></div>
+    <script type="module">
+      import { RackSimulation } from '/src/core/RackSimulation.ts';
+      import { RackRenderer } from '/src/three/RackRenderer.ts';
+      import { DEFAULT_RACK } from '/src/core/rackLayout.ts';
+      import { downloadSnapshot } from '/src/core/snapshotIo.ts';
+
+      const results = [];
+      const log = (name, ok, detail = '') => results.push({ name, ok, detail });
+      const errors = [];
+      window.addEventListener('error', (e) => errors.push(String(e.message)));
+      window.addEventListener('unhandledrejection', (e) => errors.push(String(e.reason)));
+
+      try {
+        const sim = new RackSimulation(DEFAULT_RACK, { temperature: 20, humidity: 85 }, 20260601);
+        log('simulation-4200-sticks', sim.total >= 4000, `total=${sim.total}`);
+
+        const renderer = new RackRenderer(document.getElementById('c'), sim);
+        window.__smokeRenderer = renderer;
+        log('renderer-created', true);
+
+        sim.step(24 * 12);
+        renderer.update(sim);
+        log('growth-step', sim.meanStage() > 0, `meanStage=${sim.meanStage().toFixed(4)}`);
+
+        const morph = sim.getMorphology(100);
+        const opacityOk = morph.membraneOpacity >= 0.2 - 1e-9 && morph.membraneOpacity <= 0.7 + 1e-9;
+        log('membrane-opacity-range', opacityOk, `opacity=${morph.membraneOpacity.toFixed(3)}`);
+
+        // 视角切换：实例矩阵不重建（同一引用）
+        const matrixRef = renderer['capMesh'].instanceMatrix;
+        renderer.setView('top');
+        renderer.setView('side');
+        log('view-switch-no-rebuild', renderer['capMesh'].instanceMatrix === matrixRef);
+
+        // 环境实时调节
+        sim.setEnvironment({ temperature: 8, humidity: 20 });
+        renderer.update(sim);
+        log('env-live-update', true);
+        sim.setEnvironment({ temperature: 20, humidity: 85 });
+
+        // 对比高亮
+        renderer.setHighlightLayer(2);
+        log('highlight-layer', renderer['highlightUniform'].value === 2);
+
+        // 快照导出 → 载入还原
+        const snap = sim.exportSnapshot('2026-11-22T00:00:00.000Z');
+        const restored = RackSimulation.fromSnapshot(snap);
+        let roundtripOk = true;
+        for (let i = 0; i < sim.total; i++) {
+          if (Math.abs(restored.stages[i] - sim.stages[i]) > 1e-6) {
+            roundtripOk = false;
+            break;
+          }
+        }
+        log('snapshot-roundtrip', roundtripOk, `bytes=${snap.morphology.length}`);
+        renderer.bindSimulation(restored);
+        log('bind-simulation-reuse', renderer['capMesh'].instanceMatrix === matrixRef);
+
+        // 等两帧确保 WebGL draw call 实际执行
+        await new Promise((r) => setTimeout(r, 300));
+        const gl = renderer['renderer'].getContext();
+        log('webgl-context-live', gl !== null && !gl.isContextLost());
+
+        const failed = results.filter((r) => !r.ok);
+        const okAll = failed.length === 0 && errors.length === 0;
+        // 把逐项结果压进 title，dump-dom 即可读取，不依赖渲染后的节点
+        const summary = results.map((r) => `${r.name}=${r.ok ? 1 : 0}`).join(';');
+        document.title = okAll
+          ? `SMOKE_PASS|${summary}|ctxlost=0|sticks=${renderer['stickMesh'].count},caps=${renderer['capMesh'].count},stems=${renderer['stemMesh'].count},membranes=${renderer['membraneMesh'].count}`
+          : `SMOKE_FAIL|${failed.map((f) => f.name).join(',')}|err=${errors.join(',')}`;
+
+        // 近景相机由 CDP 驱动（window.__zoomIn），避免被 OrbitControls 循环覆盖
+        window.__zoomIn = () => {
+          const cam = renderer['camera'];
+          const controls = renderer['controls'];
+          controls.enabled = false;
+          cam.position.set(4.2, 2.6, 6.2);
+          controls.target.set(0, 1.2, 0);
+          cam.lookAt(controls.target);
+          return 'zoomed';
+        };
+        window.__zoomOut = () => {
+          renderer['controls'].enabled = true;
+          renderer.setView('side');
+          return 'out';
+        };
+        window.__topView = () => {
+          renderer.setView('top');
+          return 'top';
+        };
+
+        const out = { title: document.title, results, errors };
+        const pre = document.createElement('pre');
+        pre.id = 'smoke-output';
+        pre.textContent = JSON.stringify(out, null, 2);
+        document.body.appendChild(pre);
+      } catch (err) {
+        const pre = document.createElement('pre');
+        pre.id = 'smoke-output';
+        pre.textContent = JSON.stringify({ title: 'SMOKE_FAIL', fatal: String(err), errors }, null, 2);
+        document.body.appendChild(pre);
+        document.title = 'SMOKE_FAIL';
+      }
+    </script>
+  </body>
+</html>

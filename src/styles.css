@@ -1,0 +1,399 @@
+:root {
+  --bg: #0d1117;
+  --panel: #161d26;
+  --panel-2: #1c2530;
+  --border: #2a3644;
+  --text: #dce4ec;
+  --text-dim: #8fa0b3;
+  --accent: #4da3ff;
+  --accent-warm: #ff9f43;
+  --good: #46c98b;
+  --danger: #ff6b6b;
+  font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── 顶栏 ─────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.topbar__brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.topbar__logo {
+  font-size: 30px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.topbar p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.topbar__controls {
+  display: flex;
+  gap: 10px;
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.seg__btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.seg__btn:hover {
+  color: var(--text);
+}
+
+.seg__btn--active {
+  background: var(--accent);
+  color: #08121f;
+  font-weight: 600;
+}
+
+/* ── 布局 ─────────────────────────────────────────── */
+.layout {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  min-height: 0;
+}
+
+.layout--compare {
+  grid-template-columns: minmax(0, 1fr) 330px;
+}
+
+.layout__stage {
+  position: relative;
+  min-width: 0;
+}
+
+.rack-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.rack-canvas canvas {
+  display: block;
+}
+
+.layout__sidebar {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.layout__sidebar--compare {
+  padding: 10px;
+  gap: 10px;
+}
+
+/* ── 对比视图 ─────────────────────────────────────── */
+.compare-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  min-height: 0;
+}
+
+.compare-cell {
+  position: relative;
+  min-height: 0;
+  background: var(--bg);
+}
+
+.compare-cell__label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 2;
+  background: rgba(13, 17, 23, 0.82);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* ── 环境面板 ─────────────────────────────────────── */
+.env-panel {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.env-panel__title {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.dot--a {
+  background: var(--accent);
+}
+
+.dot--b {
+  background: var(--accent-warm);
+}
+
+.env-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.env-control__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.env-control__head label {
+  color: var(--text-dim);
+}
+
+.env-control__head output {
+  font-size: 13px;
+}
+
+.env-control__head output strong {
+  font-size: 16px;
+  color: var(--accent);
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.tick-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.tick--active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.factor-line {
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+
+.factor-line b {
+  color: var(--good);
+}
+
+.factor-line--combined {
+  background: rgba(77, 163, 255, 0.08);
+  border: 1px solid rgba(77, 163, 255, 0.25);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--good));
+  transition: width 0.2s linear;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1 1 auto;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #08121f;
+  font-weight: 600;
+}
+
+.btn--wide {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.speed-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+/* ── 对比表 ───────────────────────────────────────── */
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.diff-table th,
+.diff-table td {
+  padding: 6px 4px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+
+.diff-table th:first-child,
+.diff-table td:first-child {
+  text-align: left;
+}
+
+.diff-table th {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.diff-table__row--max {
+  background: rgba(255, 159, 67, 0.12);
+}
+
+.hl-tag {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  background: var(--accent-warm);
+  color: #1f1206;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: 700;
+}
+
+.diff-pos {
+  color: var(--good);
+}
+
+.diff-neg {
+  color: var(--danger);
+}
+
+/* ── 浮层 ─────────────────────────────────────────── */
+.view-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(13, 17, 23, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+.toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--panel-2);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  z-index: 100;
+  max-width: 70vw;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+}
