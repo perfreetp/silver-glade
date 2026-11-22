@@ -16,3 +16,7 @@ node_modules/
 __pycache__/
 .venv/
 venv/
+.verify/node_modules/
+.verify/chrome-profile*/
+.verify/smoke.png
+.verify/export-sample.json

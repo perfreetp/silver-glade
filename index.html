@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>机房线缆走线预览工具</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- 模块一：机柜布局与端口选择 -->
+    <section class="panel" id="panel-layout">
+      <h2>① 机柜布局与端口选择</h2>
+      <div class="panel-body">
+        <div class="hint">在视口中点击机柜端口进行选择，再次点击已选端口可取消。</div>
+        <div class="port-sel">
+          <div class="port-slot" id="slot-a">
+            <span class="slot-label">起点端口 A</span>
+            <span class="slot-value" id="val-a">未选择</span>
+          </div>
+          <div class="port-slot" id="slot-b">
+            <span class="slot-label">终点端口 B</span>
+            <span class="slot-value" id="val-b">未选择</span>
+          </div>
+        </div>
+        <button id="btn-search" class="primary" disabled>搜索避障路径（3 条候选）</button>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="chk-boxes" /> 显示机柜包围盒</label>
+        </div>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="chk-grid" checked /> 显示地面网格</label>
+        </div>
+        <hr />
+        <div class="sub-title">批量生成（300 条规模验证）</div>
+        <div class="row">
+          <label>数量 <input type="number" id="batch-count" value="300" min="1" max="320" style="width:80px" /></label>
+          <button id="btn-batch">批量建线</button>
+        </div>
+        <div class="progress" id="batch-progress" hidden><div class="bar" id="batch-bar"></div></div>
+      </div>
+    </section>
+
+    <!-- 模块二：避障路径搜索 -->
+    <section class="panel" id="panel-search">
+      <h2>② 避障路径搜索 <span class="badge">Web Worker · A*</span></h2>
+      <div class="panel-body">
+        <div class="sub-title">候选路径（同对端口对比）</div>
+        <div id="variant-list" class="variant-list empty">请先选择两个端口并搜索</div>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="chk-snap" checked /> 控制点网格吸附</label>
+        </div>
+        <div class="row">
+          <label>弯曲模式
+            <select id="sel-mode">
+              <option value="fillet">圆角折线（精确弯曲半径）</option>
+              <option value="spline">Catmull-Rom 样条平滑</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label>弯曲半径 <span id="val-bend">0.25</span> m
+            <input type="range" id="rng-bend" min="0.05" max="0.6" step="0.01" value="0.25" />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 模块三：线缆曲线渲染视口 -->
+    <main id="viewport-panel">
+      <canvas id="viewport"></canvas>
+      <div class="view-toolbar">
+        <label>全局粗细
+          <input type="range" id="rng-radius" min="0.012" max="0.08" step="0.002" value="0.035" />
+          <span id="val-radius">0.035</span> m
+        </label>
+        <label>全局颜色
+          <select id="sel-color"></select>
+        </label>
+        <span class="legend"><i class="swatch red"></i>碰撞穿模段</span>
+        <span class="legend" id="view-count">线缆 0 条</span>
+      </div>
+      <div class="view-tip" id="view-tip">左键旋转 · 右键平移 · 滚轮缩放 · 点击端口选点 · 点击线缆选中</div>
+      <div id="tooltip" class="tooltip" hidden></div>
+    </main>
+
+    <!-- 模块四：路径调整与导出面板 -->
+    <section class="panel" id="panel-adjust">
+      <h2>④ 路径调整与导出</h2>
+      <div class="panel-body">
+        <div class="sub-title">当前线缆</div>
+        <div id="cable-info" class="cable-info empty">未选中线缆（点击视口中的线缆）</div>
+        <div class="row">
+          <label>单条颜色 <select id="sel-cable-color"></select></label>
+        </div>
+        <div class="row">
+          <label>单条粗细 <span id="val-cable-radius"></span>
+            <input type="range" id="rng-cable-radius" min="0.012" max="0.08" step="0.002" value="0.035" />
+          </label>
+        </div>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="chk-wp" checked /> 显示控制点（拖动调整走线）</label>
+        </div>
+        <div class="hint">双击控制点在其后插入新点；右键控制点删除（至少保留 2 个点）。</div>
+        <hr />
+        <div class="sub-title">长度清单</div>
+        <div class="stats">
+          <div><span>线缆总数</span><b id="stat-count">0</b></div>
+          <div><span>总长度</span><b id="stat-total">0.00 m</b></div>
+          <div><span>碰撞线缆</span><b id="stat-collision">0</b></div>
+          <div><span>穿透长度</span><b id="stat-hitlen">0.00 m</b></div>
+        </div>
+        <div class="table-wrap">
+          <table id="length-table">
+            <thead><tr><th>编号</th><th>端口 A</th><th>端口 B</th><th>方案</th><th>长度(m)</th><th>碰撞</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="btn-row">
+          <button id="btn-export-json">导出路径点集 JSON</button>
+          <button id="btn-export-csv">导出长度清单 CSV</button>
+          <button id="btn-clear" class="danger">清空全部</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

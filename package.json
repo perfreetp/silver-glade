@@ -1,0 +1,11 @@
+{
+  "name": "datacenter-cable-routing-preview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "基于 three.js 的机房线缆走线预览工具（A* 避障、样条/圆角曲线、碰撞检测、实例化渲染、Worker 搜索）",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node .verify/test-astar.mjs && node .verify/test-curve.mjs && node .verify/test-variants.mjs && node .verify/test-integration.mjs"
+  }
+}
