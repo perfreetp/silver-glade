@@ -1,0 +1,27 @@
+{
+  "name": "mushroom-barn-airflow",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Mushroom growing room ventilation airflow visualiser — voxel wind field, particle trails, section slices",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "postprocessing": "^6.39.6",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@types/three": "^0.187.0",
+    "svelte": "^5.59.1",
+    "svelte-check": "^4.7.8",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8"
+  }
+}
