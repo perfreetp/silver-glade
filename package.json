@@ -1,0 +1,28 @@
+{
+  "name": "headlamp-pattern-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "LED 前照灯透镜光型渲染工具 (SolidJS + three.js + three-mesh-bvh)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test:smoke": "tsx tests/smoke.ts",
+    "test:e2e": "playwright test tests/e2e.smoke.spec.ts"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.20",
+    "three": "^0.187.0",
+    "three-mesh-bvh": "^0.9.18"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^22.20.5",
+    "@types/three": "^0.187.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vite-plugin-solid": "^2.11.17"
+  }
+}
