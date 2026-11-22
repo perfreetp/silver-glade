@@ -1,3 +1,12 @@
+node_modules
+dist
+dist-test
+*.local
+.DS_Store
+test/screenshot-*.png
+playwright-report
+test-results
+
 .env
 .env.*
 !.env.example

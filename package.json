@@ -1,0 +1,25 @@
+{
+  "name": "mycelium-spread-visualizer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "菌包菌丝蔓延生长可视化工具（TypeScript + Web Components + three.js WebGPU）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test:kernel": "vite build -c vite.test.config.ts && node dist-test/kernel.test.js",
+    "test:smoke": "node test/smoke.mjs",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/three": "0.187.0",
+    "playwright": "^1.65.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.8"
+  }
+}

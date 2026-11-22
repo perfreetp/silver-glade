@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>菌包菌丝蔓延可视化</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>菌包菌丝蔓延生长可视化</h1>
+        <div id="iso-warning" class="iso-warning" hidden>
+          当前环境未启用跨源隔离（SharedArrayBuffer 不可用），并行模拟将退化为单线程模式。
+        </div>
+      </header>
+      <main class="app-main">
+        <section class="view-column">
+          <mycelium-view id="view"></mycelium-view>
+          <playback-bar id="playback"></playback-bar>
+        </section>
+        <aside class="side-column">
+          <param-panel id="params"></param-panel>
+          <inoculation-editor id="inoculation"></inoculation-editor>
+          <export-panel id="export"></export-panel>
+          <sim-status id="status"></sim-status>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
