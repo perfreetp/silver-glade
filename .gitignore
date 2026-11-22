@@ -16,3 +16,9 @@ node_modules/
 __pycache__/
 .venv/
 venv/
+
+# build & test artifacts
+dist/
+tests/e2e/shots/
+tests/e2e/*.png
+tools/tmp/

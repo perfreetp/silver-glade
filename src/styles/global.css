@@ -1,0 +1,210 @@
+:root {
+  color-scheme: dark;
+
+  --bg-0: #080a0e;
+  --bg-1: #0d1117;
+  --bg-2: #131a23;
+  --bg-3: #1a232e;
+  --line: #223041;
+  --line-soft: #1a2532;
+
+  --fg-0: #e8eef6;
+  --fg-1: #a8b7c9;
+  --fg-2: #6f8098;
+
+  --accent: #38bdf8;
+  --accent-dim: #0e7490;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --ok: #34d399;
+
+  --radius: 8px;
+  --radius-sm: 5px;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "Consolas", monospace;
+  --sans: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-0);
+  color: var(--fg-0);
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+input,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #263341;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #33475c;
+}
+
+/* 通用控件 ------------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  color: var(--fg-0);
+  font-weight: 500;
+  transition: background 0.14s, border-color 0.14s, opacity 0.14s;
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:hover:not(:disabled) {
+  background: #222d3b;
+  border-color: #2e4156;
+}
+.btn:active:not(:disabled) {
+  transform: translateY(0.5px);
+}
+.btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+.btn.primary {
+  background: linear-gradient(180deg, #0d6d92, #0a5675);
+  border-color: #1580a8;
+  color: #f0faff;
+}
+.btn.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #1081ad, #0c627f);
+}
+.btn.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--fg-1);
+}
+.btn.ghost:hover:not(:disabled) {
+  background: var(--bg-3);
+  color: var(--fg-0);
+}
+.btn.danger {
+  border-color: #5d2b2b;
+  color: #fca5a5;
+}
+.btn.danger:hover:not(:disabled) {
+  background: #2a1616;
+}
+.btn.sm {
+  padding: 4px 9px;
+  font-size: 12px;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-0);
+  border: 1px solid var(--line);
+  color: var(--fg-0);
+  outline: none;
+  transition: border-color 0.14s;
+}
+.input:focus,
+.select:focus {
+  border-color: var(--accent-dim);
+}
+.select {
+  cursor: pointer;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.field > label {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  font-weight: 600;
+}
+
+.card {
+  background: var(--bg-1);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid var(--line);
+  color: var(--fg-1);
+  background: var(--bg-2);
+  white-space: nowrap;
+}
+.chip.ok {
+  color: var(--ok);
+  border-color: #16453a;
+  background: #0d1f1a;
+}
+.chip.warn {
+  color: var(--warn);
+  border-color: #4a3712;
+  background: #1f1810;
+}
+.chip.err {
+  color: var(--danger);
+  border-color: #4a2020;
+  background: #1f1212;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.sep {
+  height: 1px;
+  background: var(--line-soft);
+  margin: 12px 0;
+}

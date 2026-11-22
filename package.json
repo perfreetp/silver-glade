@@ -1,0 +1,29 @@
+{
+  "name": "datacenter-thermal-viewer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "test": "vitest run",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "test:stress": "node tests/e2e/stress.mjs",
+    "gen:mc": "node tools/genMCTables.mjs",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@babylonjs/core": "9.37.1",
+    "fflate": "0.8.3",
+    "vue": "3.5.46"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.11",
+    "puppeteer-core": "25.18.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.8",
+    "vitest": "5.1.1",
+    "vue-tsc": "3.1.4"
+  }
+}
