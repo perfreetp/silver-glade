@@ -1,0 +1,10 @@
+{
+  "model": "ring.glb",
+  "band": "band",
+  "gem": "gem",
+  "girdleZ": 0.5837500000000001,
+  "gemRadius": 0.155,
+  "fingerRadius": 0.34,
+  "bandWidth": 0.115,
+  "bandOuterRadius": 0.39000000000000007
+}

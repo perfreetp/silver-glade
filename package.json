@@ -1,0 +1,46 @@
+{
+  "name": "jewelry-tryon",
+  "version": "1.0.0",
+  "description": "基于 TypeScript + React + three.js WebGPURenderer 的珠宝试戴渲染工具",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit",
+    "assets": "node scripts/make-assets.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perfreetp/silver-glade.git"
+  },
+  "keywords": [
+    "three.js",
+    "webgpu",
+    "react",
+    "jewelry",
+    "gemstone",
+    "dispersion",
+    "tsl"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/perfreetp/silver-glade/issues"
+  },
+  "homepage": "https://github.com/perfreetp/silver-glade#readme",
+  "private": true,
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}
